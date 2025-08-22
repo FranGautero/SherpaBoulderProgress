@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full;
+  }
+  
+  body {
+    @apply h-full bg-gray-50 font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .boulder-cell {
+    @apply w-16 h-16 border-2 border-gray-300 flex items-center justify-center transition-all duration-200 hover:border-gray-400;
+  }
+  
+  .boulder-cell-full {
+    @apply w-full h-16 border-2 border-gray-300 flex items-center justify-center transition-all duration-200 hover:border-gray-400;
+  }
+  
+  .boulder-cell.completed,
+  .boulder-cell-full.completed {
+    @apply border-green-600 text-green-800;
+  }
+  
+  .boulder-cell-full.verdes.completed {
+    @apply bg-green-200 border-green-600 text-green-800;
+  }
+  
+  .boulder-cell-full.amarillos.completed {
+    @apply bg-yellow-200 border-yellow-600 text-yellow-800;
+  }
+  
+  .boulder-cell-full.rojos.completed {
+    @apply bg-red-200 border-red-600 text-red-800;
+  }
+  
+  .boulder-cell-full.lilas.completed {
+    @apply bg-purple-200 border-purple-600 text-purple-800;
+  }
+  
+  .boulder-cell-full.negros.completed {
+    @apply bg-gray-300 border-gray-700 text-gray-800;
+  }
+  
+  .boulder-cell.verde,
+  .boulder-cell-full.verdes {
+    @apply border-green-500 bg-green-50;
+  }
+  
+  .boulder-cell.amarillo,
+  .boulder-cell-full.amarillos {
+    @apply border-yellow-500 bg-yellow-50;
+  }
+  
+  .boulder-cell.rojo,
+  .boulder-cell-full.rojos {
+    @apply border-red-500 bg-red-50;
+  }
+  
+  .boulder-cell.lila,
+  .boulder-cell-full.lilas {
+    @apply border-purple-500 bg-purple-50;
+  }
+  
+  .boulder-cell.negro,
+  .boulder-cell-full.negros {
+    @apply border-gray-800 bg-gray-100;
+  }
+}
