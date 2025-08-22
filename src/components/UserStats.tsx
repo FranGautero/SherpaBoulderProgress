@@ -116,44 +116,44 @@ export default function UserStats({ user, userProgress }: UserStatsProps) {
   return (
     <div className="space-y-6">
       {/* Overall Stats */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">
           📊 Estadísticas
         </h3>
         
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Total Boulders:</span>
-            <span className="text-2xl font-bold text-blue-600">{stats.totalBoulders}</span>
+            <span className="text-sm md:text-base text-gray-600">Total Boulders:</span>
+            <span className="text-xl md:text-2xl font-bold text-blue-600">{stats.totalBoulders}</span>
           </div>
           
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Puntos Totales:</span>
-            <span className="text-2xl font-bold text-green-600">{stats.totalPoints}</span>
+            <span className="text-sm md:text-base text-gray-600">Puntos Totales:</span>
+            <span className="text-xl md:text-2xl font-bold text-green-600">{stats.totalPoints}</span>
           </div>
           
-          <hr className="my-4" />
+          <hr className="my-3 md:my-4" />
           
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Hoy:</span>
-            <span className="text-lg font-semibold text-orange-600">{stats.completedToday}</span>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">Esta semana:</span>
-            <span className="text-lg font-semibold text-purple-600">{stats.completedThisWeek}</span>
+            <span className="text-sm md:text-base text-gray-600">Hoy:</span>
+            <span className="text-base md:text-lg font-semibold text-orange-600">{stats.completedToday}</span>
           </div>
           
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Este mes:</span>
-            <span className="text-lg font-semibold text-indigo-600">{stats.completedThisMonth}</span>
+            <span className="text-sm md:text-base text-gray-600">Esta semana:</span>
+            <span className="text-base md:text-lg font-semibold text-purple-600">{stats.completedThisWeek}</span>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <span className="text-sm md:text-base text-gray-600">Este mes:</span>
+            <span className="text-base md:text-lg font-semibold text-indigo-600">{stats.completedThisMonth}</span>
           </div>
         </div>
       </div>
 
       {/* By Color Stats */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">
           🎨 Por Color
         </h3>
         

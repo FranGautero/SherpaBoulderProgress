@@ -22,6 +22,14 @@ const COLOR_LABELS = {
   negros: 'Negros'
 };
 
+const COLOR_LABELS_SHORT = {
+  verdes: 'V',
+  amarillos: 'A',
+  rojos: 'R',
+  lilas: 'L',
+  negros: 'N'
+};
+
 const ZONE_LABELS = {
   proa: 'Proa',
   popa: 'Popa',
@@ -29,6 +37,15 @@ const ZONE_LABELS = {
   estribor: 'Estribor',
   'desplome-de-los-loros': 'Desplome de los Loros',
   amazonia: 'Amazonía'
+};
+
+const ZONE_LABELS_MOBILE = {
+  proa: 'Proa',
+  popa: 'Popa', 
+  babor: 'Babor',
+  estribor: 'Estribor',
+  'desplome-de-los-loros': 'Loros',
+  amazonia: 'Amazonia'
 };
 
 interface BoulderGridProps {
@@ -142,43 +159,38 @@ export default function BoulderGrid({ user, userProgress, setUserProgress }: Bou
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Boulder Progress</h2>
+    <div className="bg-white rounded-lg shadow-lg p-3 md:p-6">
+      <div className="mb-4 md:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+          <h2 className="text-lg md:text-2xl font-bold text-gray-900">Boulder Progress</h2>
           <div className="flex items-center space-x-4">
-            <div className="text-lg font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+            <div className="text-sm md:text-lg font-bold text-blue-600 bg-blue-50 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-blue-200">
               {getCurrentMonth()}
             </div>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-2">
+        <p className="text-xs md:text-sm text-gray-600 mb-1.5">
           Usa los botones + y - para indicar cuántos boulders has completado en cada zona
         </p>
-        <p className="text-sm font-medium text-gray-800">
+        <p className="text-xs md:text-sm font-medium text-gray-800">
           Cada boulder completado vale 100 puntos
         </p>
       </div>
 
       <div className="overflow-x-auto">
         <div className="min-w-full">
-          <div className="grid grid-cols-7 gap-1 text-sm">
-            {/* Header row */}
-            <div className="font-bold text-center py-3 bg-gray-100 rounded">
-              Rutas / Zonas
-            </div>
+          <div className="grid grid-cols-6 gap-px md:gap-1 text-sm">
+            {/* Header row - zones only */}
             {BOULDER_ZONES.map(zone => (
-              <div key={zone} className="font-bold text-center py-3 bg-gray-100 rounded text-xs sm:text-sm">
-                {ZONE_LABELS[zone]}
+              <div key={zone} className="font-bold text-center py-1.5 md:py-3 bg-gray-100 rounded text-xs leading-tight">
+                <span className="md:hidden text-[10px]">{ZONE_LABELS_MOBILE[zone]}</span>
+                <span className="hidden md:inline">{ZONE_LABELS[zone]}</span>
               </div>
             ))}
 
             {/* Boulder grid */}
             {BOULDER_COLORS.map(color => (
               <div key={color} className="contents">
-                <div className="font-bold py-3 bg-gray-50 rounded text-center text-xs sm:text-sm">
-                  {COLOR_LABELS[color]}
-                </div>
                 {BOULDER_ZONES.map(zone => {
                   const boulder = getBoulder(color, zone);
                   const currentCount = boulder ? getBoulderCount(boulder) : 0;
@@ -190,19 +202,19 @@ export default function BoulderGrid({ user, userProgress, setUserProgress }: Bou
                         boulder-cell-full ${color} 
                         ${currentCount > 0 ? 'completed bg-green-100 border-green-500' : ''}
                         ${!boulder ? 'opacity-50' : ''}
-                        text-xs font-medium p-2
+                        text-xs font-medium p-1 md:p-2
                       `}
                       title={boulder ? `${COLOR_LABELS[color]} - ${ZONE_LABELS[zone]} (100 puntos cada uno)` : 'Boulder no disponible'}
                     >
                       {boulder ? (
-                        <div className="flex items-center justify-center h-full space-x-2">
-                          <span className="text-xl font-bold text-center flex-shrink-0">
+                        <div className="flex items-center justify-center h-full space-x-0.5 md:space-x-2">
+                          <span className="text-[10px] md:text-xl font-bold text-center flex-shrink-0 min-w-[0.75rem] md:min-w-[1.75rem]">
                             {currentCount}
                           </span>
-                          <div className="flex flex-col space-y-1">
+                          <div className="flex flex-col space-y-0.5 md:space-y-1 my-1 md:my-0">
                             <button
                               onClick={() => updateBoulderCount(boulder, currentCount + 1)}
-                              className="w-5 h-5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded flex items-center justify-center font-bold leading-none transition-colors"
+                              className="w-3 h-3 md:w-5 md:h-5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white text-[8px] md:text-xs rounded-sm flex items-center justify-center font-bold leading-none transition-colors touch-manipulation"
                               title="Agregar boulder"
                             >
                               +
@@ -210,7 +222,7 @@ export default function BoulderGrid({ user, userProgress, setUserProgress }: Bou
                             <button
                               onClick={() => updateBoulderCount(boulder, currentCount - 1)}
                               disabled={currentCount === 0}
-                              className="w-5 h-5 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-xs rounded flex items-center justify-center font-bold leading-none transition-colors"
+                              className="w-3 h-3 md:w-5 md:h-5 bg-red-500 hover:bg-red-600 active:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[8px] md:text-xs rounded-sm flex items-center justify-center font-bold leading-none transition-colors touch-manipulation"
                               title="Quitar boulder"
                             >
                               -
