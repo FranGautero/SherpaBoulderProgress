@@ -123,3 +123,4 @@ Personal project - Feel free to adapt for your climbing club.
 ---
 
 **Made with ❤️ for the climbing community** 🧗‍♂️🏔️
+# Trigger Vercel deployment
