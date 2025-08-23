@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Simple Monthly Reset Edge Function
 // Deletes all user progress without keeping history - perfect for monthly challenges
 // Can be called manually or via GitHub Actions automation
@@ -6,7 +7,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-simple-reset-secret',
 }
 
 interface ResetResult {
@@ -44,7 +45,7 @@ Deno.serve(async (req) => {
     if (customSecret && customSecret === resetSecret) {
       isAuthorized = true
       console.log('🔐 Authorized via custom reset secret (automated)')
-    } else if (authHeader?.startsWith('Bearer ')) {
+    } else if (authHeader?.startsWith('Bearer ') && authHeader !== 'Bearer dummy') {
       // Allow authenticated users (for manual admin reset)
       const token = authHeader.replace('Bearer ', '')
       const { data: user, error } = await supabase.auth.getUser(token)
