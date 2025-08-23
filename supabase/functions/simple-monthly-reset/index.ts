@@ -45,14 +45,17 @@ Deno.serve(async (req) => {
     if (customSecret && customSecret === resetSecret) {
       isAuthorized = true
       console.log('🔐 Authorized via custom reset secret (automated)')
-    } else if (authHeader?.startsWith('Bearer ') && authHeader !== 'Bearer dummy') {
+    } else if (authHeader?.startsWith('Bearer ')) {
       // Allow authenticated users (for manual admin reset)
+      // The anon key from GitHub Actions will pass through here but we rely on custom secret
       const token = authHeader.replace('Bearer ', '')
       const { data: user, error } = await supabase.auth.getUser(token)
       
       if (user && !error) {
         isAuthorized = true
         console.log('🔐 Authorized via user token (manual)')
+      } else {
+        console.log('🔍 Bearer token present but no user auth (likely anon key) - checking custom secret')
       }
     }
 
