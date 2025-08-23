@@ -33,16 +33,17 @@ Deno.serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Check authorization
+    // Check authorization using custom header to avoid Supabase JWT validation
+    const customSecret = req.headers.get('x-simple-reset-secret')
     const authHeader = req.headers.get('Authorization')
     const resetSecret = Deno.env.get('SIMPLE_RESET_SECRET') || 'change-this-secret'
     
-    // Verify either cron secret or valid user token
+    // Verify either custom secret header or valid user token
     let isAuthorized = false
     
-    if (authHeader?.includes(resetSecret)) {
+    if (customSecret && customSecret === resetSecret) {
       isAuthorized = true
-      console.log('🔐 Authorized via reset secret (automated)')
+      console.log('🔐 Authorized via custom reset secret (automated)')
     } else if (authHeader?.startsWith('Bearer ')) {
       // Allow authenticated users (for manual admin reset)
       const token = authHeader.replace('Bearer ', '')

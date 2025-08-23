@@ -42,7 +42,7 @@ jobs:
           
           RESPONSE=$(curl -s -w "HTTPSTATUS:%{http_code}" \
             -X POST \
-            -H "Authorization: Bearer ${{ secrets.SIMPLE_RESET_SECRET }}" \
+            -H "x-simple-reset-secret: ${{ secrets.SIMPLE_RESET_SECRET }}" \
             -H "Content-Type: application/json" \
             -d '{"source": "github-actions", "type": "simple-reset"}' \
             "${{ secrets.SUPABASE_URL }}/functions/v1/simple-monthly-reset")
