@@ -288,9 +288,15 @@ export default function UserStats({ user, userProgress }: UserStatsProps) {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
-                className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  stats.totalPoints >= 9000 
+                    ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' 
+                    : 'bg-blue-600'
+                }`}
                 style={{
-                  width: `${Math.min(100, (stats.totalPoints % 1000) / 10)}%`
+                  width: stats.totalPoints >= 9000 
+                    ? '100%' 
+                    : `${Math.min(100, (stats.totalPoints % 1000) / 10)}%`
                 }}
               ></div>
             </div>
