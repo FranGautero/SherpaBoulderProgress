@@ -1,0 +1,95 @@
+name: 🔄 Simple Monthly Progress Reset
+
+on:
+  schedule:
+    # Runs at 6:00 AM Mexico City time on the 1st day of every month
+    # Mexico City is UTC-6 (standard) or UTC-5 (daylight), so 11:00 UTC
+    - cron: '0 11 1 * *'
+  workflow_dispatch:  # Allows manual triggering
+    inputs:
+      confirm_reset:
+        description: '⚠️ Type "RESET" to confirm deletion of all progress'
+        required: true
+        default: ''
+
+jobs:
+  simple-monthly-reset:
+    name: 🗑️ Reset All Progress (No History)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🎯 Validate Manual Reset
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [[ "${{ github.event.inputs.confirm_reset }}" != "RESET" ]]; then
+            echo "❌ Manual reset cancelled - confirmation required"
+            echo "Please type 'RESET' to confirm deletion of all progress data"
+            exit 1
+          fi
+          echo "✅ Manual reset confirmed"
+          
+      - name: 🏁 Start Monthly Reset
+        run: |
+          echo "🔄 Starting simple monthly boulder progress reset..."
+          echo "📅 Current date: $(date)"
+          echo "⚠️ This will DELETE ALL progress data without keeping history"
+          echo "🎯 Fresh start for all climbing club members!"
+          
+      - name: 🗑️ Execute Simple Reset
+        id: reset
+        run: |
+          echo "🚀 Calling Supabase Edge Function..."
+          
+          RESPONSE=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.SIMPLE_RESET_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{"source": "github-actions", "type": "simple-reset"}' \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/simple-monthly-reset")
+          
+          # Extract HTTP status and body
+          HTTP_STATUS=$(echo $RESPONSE | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+          BODY=$(echo $RESPONSE | sed -e 's/HTTPSTATUS:.*//')
+          
+          echo "📡 HTTP Status: $HTTP_STATUS"
+          echo "📋 Response: $BODY"
+          
+          if [ $HTTP_STATUS -ne 200 ]; then
+            echo "❌ Reset failed with status $HTTP_STATUS"
+            echo "🔍 Response details: $BODY"
+            exit 1
+          fi
+          
+          echo "✅ Simple monthly reset completed successfully!"
+          
+          # Extract deleted count for summary (if available)
+          DELETED_COUNT=$(echo $BODY | grep -o '"deleted_records":[0-9]*' | cut -d':' -f2 || echo "unknown")
+          echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
+          
+      - name: 🎉 Reset Success Summary
+        if: success()
+        run: |
+          echo "🎉 Monthly boulder progress reset completed successfully!"
+          echo ""
+          echo "📊 Reset Summary:"
+          echo "- 🗑️ Deleted records: ${{ steps.reset.outputs.deleted_count }}"
+          echo "- 🆕 All users start fresh with 0 points"
+          echo "- 🎯 New monthly challenge begins!"
+          echo "- 🧗‍♂️ Ready for fresh boulder conquests!"
+          echo ""
+          echo "📅 Next automatic reset: 1st day of next month at 6:00 AM Mexico City time"
+          echo "🔧 Manual reset: Run this workflow anytime from GitHub Actions tab"
+          
+      - name: ❌ Reset Failure Report
+        if: failure()
+        run: |
+          echo "❌ Monthly reset failed!"
+          echo ""
+          echo "🔍 Troubleshooting steps:"
+          echo "1. Check Supabase Edge Function is deployed"
+          echo "2. Verify SIMPLE_RESET_SECRET is set correctly"
+          echo "3. Ensure SUPABASE_URL points to your project"
+          echo "4. Check function logs in Supabase Dashboard"
+          echo ""
+          echo "🔧 You can manually run the reset from GitHub Actions tab"
+          echo "📧 Consider notifying climbing club administrators"
