@@ -201,49 +201,96 @@ export default function UserStats({ user, userProgress }: UserStatsProps) {
       </div>
 
       {/* Achievement Levels */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">
           🏆 Nivel de Progreso
         </h3>
         
         <div className="space-y-3">
-          {stats.totalPoints >= 2000 && (
-            <div className="flex items-center space-x-2 text-yellow-600">
-              <span>🥇</span>
-              <span className="font-semibold">Maestro Escalador</span>
-            </div>
-          )}
-          {stats.totalPoints >= 1000 && stats.totalPoints < 2000 && (
-            <div className="flex items-center space-x-2 text-gray-500">
-              <span>🥈</span>
-              <span className="font-semibold">Escalador Avanzado</span>
-            </div>
-          )}
-          {stats.totalPoints >= 500 && stats.totalPoints < 1000 && (
-            <div className="flex items-center space-x-2 text-orange-600">
-              <span>🥉</span>
-              <span className="font-semibold">Escalador Intermedio</span>
-            </div>
-          )}
-          {stats.totalPoints < 500 && (
-            <div className="flex items-center space-x-2 text-green-600">
-              <span>🌱</span>
-              <span className="font-semibold">Escalador Principiante</span>
-            </div>
-          )}
+          {(() => {
+            const points = stats.totalPoints;
+            
+            // Maestro Escalador with stars (4000+ points)
+            if (points >= 4000) {
+              const extraThousands = Math.floor((points - 4000) / 1000);
+              const stars = Math.min(extraThousands, 5);
+              const starsDisplay = '⭐'.repeat(stars);
+              
+              return (
+                <div className="flex items-center space-x-2 text-yellow-600">
+                  <span>🥇</span>
+                  <span className="font-semibold">Maestro Escalador {starsDisplay}</span>
+                </div>
+              );
+            }
+            
+            // Escalador Experto (3000-3999)
+            if (points >= 3000) {
+              return (
+                <div className="flex items-center space-x-2 text-purple-600">
+                  <span>💎</span>
+                  <span className="font-semibold">Escalador Experto</span>
+                </div>
+              );
+            }
+            
+            // Escalador Avanzado (2000-2999)
+            if (points >= 2000) {
+              return (
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <span>🥈</span>
+                  <span className="font-semibold">Escalador Avanzado</span>
+                </div>
+              );
+            }
+            
+            // Escalador Intermedio (1000-1999)
+            if (points >= 1000) {
+              return (
+                <div className="flex items-center space-x-2 text-orange-600">
+                  <span>🥉</span>
+                  <span className="font-semibold">Escalador Intermedio</span>
+                </div>
+              );
+            }
+            
+            // Escalador Principiante (0-999)
+            return (
+              <div className="flex items-center space-x-2 text-green-600">
+                <span>🌱</span>
+                <span className="font-semibold">Escalador Principiante</span>
+              </div>
+            );
+          })()}
           
           <div className="mt-4">
             <div className="text-sm text-gray-500 mb-2">
-              Próximo nivel: {stats.totalPoints >= 2000 ? 'Max nivel alcanzado!' : 
-                stats.totalPoints >= 1000 ? `${2000 - stats.totalPoints} puntos` :
-                stats.totalPoints >= 500 ? `${1000 - stats.totalPoints} puntos` :
-                `${500 - stats.totalPoints} puntos`}
+              {(() => {
+                const points = stats.totalPoints;
+                
+                if (points >= 9000) {
+                  return 'Nivel máximo alcanzado! (5 ⭐)';
+                }
+                
+                if (points >= 4000) {
+                  const nextStarPoints = Math.ceil((points + 1) / 1000) * 1000;
+                  const currentStars = Math.min(Math.floor((points - 4000) / 1000), 5);
+                  if (currentStars < 5) {
+                    return `Próxima ⭐: ${nextStarPoints - points} puntos`;
+                  } else {
+                    return 'Nivel máximo alcanzado! (5 ⭐)';
+                  }
+                }
+                
+                const nextLevel = Math.ceil((points + 1) / 1000) * 1000;
+                return `Próximo nivel: ${nextLevel - points} puntos`;
+              })()}
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
                 className="bg-blue-600 h-2 rounded-full transition-all duration-500"
                 style={{
-                  width: `${Math.min(100, (stats.totalPoints % 500) / 5)}%`
+                  width: `${Math.min(100, (stats.totalPoints % 1000) / 10)}%`
                 }}
               ></div>
             </div>
