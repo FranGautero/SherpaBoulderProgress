@@ -211,7 +211,7 @@ export default function BoulderGrid({ user, userProgress, setUserProgress }: Bou
                           <span className="text-[10px] md:text-xl font-bold text-center flex-shrink-0 min-w-[0.75rem] md:min-w-[1.75rem]">
                             {currentCount}
                           </span>
-                          <div className="flex flex-col space-y-0.5 md:space-y-1 my-1 md:my-0">
+                          <div className="flex flex-col space-y-0.5 md:space-y-1 my-2 md:my-0">
                             <button
                               onClick={() => updateBoulderCount(boulder, currentCount + 1)}
                               className="w-3 h-3 md:w-5 md:h-5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white text-[8px] md:text-xs rounded-sm flex items-center justify-center font-bold leading-none transition-colors touch-manipulation"
