@@ -2,9 +2,9 @@ name: 🔄 Simple Monthly Progress Reset
 
 on:
   schedule:
-    # Runs at 6:00 AM Mexico City time on the 1st day of every month
-    # Mexico City is UTC-6 (standard) or UTC-5 (daylight), so 11:00 UTC
-    - cron: '0 11 1 * *'
+    # Runs at 6:00 AM Argentina time on the 1st day of every month  
+    # Argentina is UTC-3 (GMT-3), so 9:00 UTC
+    - cron: '0 9 1 * *'
   workflow_dispatch:  # Allows manual triggering
     inputs:
       confirm_reset:
